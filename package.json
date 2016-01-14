@@ -1,6 +1,6 @@
 {
   "name": "sails-generate-angular-controller",
-  "version": "0.10.0",
+  "version": "1.0.0",
   "description": "sails generate angular-controller",
   "main": "Generator.js",
   "scripts": {
@@ -16,8 +16,8 @@
   "author": "Joe Puzzo",
   "license": "MIT",
   "dependencies": {
-  	"lodash": ">=2.4.x",
-  	"merge-defaults": ">=0.1.0"
+    "lodash": ">=2.4.x",
+    "merge-defaults": ">=0.1.0"
   },
   "devDependencies": {
     "sails-generate": "*",
