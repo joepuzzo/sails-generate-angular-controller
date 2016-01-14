@@ -132,12 +132,12 @@ module.exports = {
     // Creates a folder at a static path
     // Example: './hey_look_a_folder': { folder: {} }
     
-    './assets/js/controllers/:foldername': { 
+    /*'./assets/js/controllers/:foldername': { 
         folder: {} 
     },
     './assets/templates/:foldername': { 
         folder: {}  
-    },
+    },*/
     './assets/js/controllers/:foldername/:ng_filename_controller': { 
         template: 'controller.template.js' 
     },
