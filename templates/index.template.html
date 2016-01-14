@@ -1,0 +1,10 @@
+<!--Base template for index page-->
+<h1>{{<%=ctrl_as%>.title}}</h1>
+<ul>
+    <li ng-repeat="something in <%=ctrl_as%>.stuff">
+        <h1>{{somthing}}</h1>
+        <a href="" ng-click="remove(something)">Delete</a>
+    </li>
+</ul>
+<div ng-show="<%=ctrl_as%>.stuff.length === 0">Looks like you haven't added any stuff yet?</div>
+<a ng-hide="<%=ctrl_as%>.adding" ui-sref="<%=ctrl_as%>.add">Add A New Thing</a>
