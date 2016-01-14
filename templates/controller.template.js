@@ -10,7 +10,7 @@
 
     // Attach the controller to the your app module
     angular.module('<%= appName %>')
-           .controller('<%= controllerName %>', <%= controllerName %>Controller);
+           .controller('<%= controllerName %>Controller', <%= controllerName %>Controller);
 
     // Recomended way of injecting dependencies
      <%= controllerName %>Controller.$inject = [/*'dependencies', '$go', 'here'*/];

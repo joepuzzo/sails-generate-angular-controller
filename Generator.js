@@ -47,6 +47,14 @@ module.exports = {
       return cb( new Error('Please provide a destinaation folder for this angular-controller.') );
     }
 
+    // Default value for target directory 
+    scope.target_dir = "components";
+
+    // If they provided a command line argument for shared then change target dir
+    if( scope.args[2] === "--shared" || scope.args[2] === "-s" ) { 
+        scope.target_dir = "shared"
+    } 
+
     // scope.rootPath is the base path for this generator
     //
     // e.g. if this generator specified the target:
@@ -96,7 +104,7 @@ module.exports = {
       ctrl_as: scope.filename, //TODO lowercase this!
       controllerName: _.str.capitalize(scope.filename),
       ng_filename_controller: scope.filename + '-controller.js', 
-      ng_filename_index: scope.filename + '.html',
+      ng_filename_html: scope.filename + '-view.html',
       ng_filename_routes: scope.filename + '-routes.js'
     });
 
@@ -132,16 +140,10 @@ module.exports = {
     // Creates a folder at a static path
     // Example: './hey_look_a_folder': { folder: {} }
     
-    /*'./assets/js/controllers/:foldername': { 
-        folder: {} 
-    },
-    './assets/templates/:foldername': { 
-        folder: {}  
-    },*/
-    './assets/js/controllers/:foldername/:ng_filename_controller': { 
+    './assets/app/:target_dir/:foldername/:ng_filename_controller': { 
         template: 'controller.template.js' 
     },
-    './assets/templates/:foldername/:ng_filename_index': { 
+    './assets/app/:target_dir/:foldername/:ng_filename_html': { 
         template: 'index.template.html' 
     },
     /*'./assets/routes/:filename/:ng_filename_routes': { 
