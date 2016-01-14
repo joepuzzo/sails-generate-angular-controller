@@ -1,6 +1,6 @@
 {
   "name": "sails-generate-angular-controller",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "sails generate angular-controller",
   "main": "Generator.js",
   "scripts": {
