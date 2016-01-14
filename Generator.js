@@ -43,6 +43,10 @@ module.exports = {
       return cb( new Error('Please provide a name for this angular-controller.') );
     }
 
+    if(!scope.args[1]) { 
+      return cb( new Error('Please provide a destinaation folder for this angular-controller.') );
+    }
+
     // scope.rootPath is the base path for this generator
     //
     // e.g. if this generator specified the target:
@@ -83,13 +87,16 @@ module.exports = {
     // Decide the output filename for use in targets below:
     scope.filename = scope.args[0];
 
+    // The output folder name
+    scope.foldername = scope.args[1];
+
     // Attach defaults
     _.defaults(scope, {
       createdAt: new Date(), 
       ctrl_as: scope.filename, //TODO lowercase this!
       controllerName: _.str.capitalize(scope.filename),
       ng_filename_controller: scope.filename + '-controller.js', 
-      ng_filename_index: 'index.html',
+      ng_filename_index: scope.filename + '.html',
       ng_filename_routes: scope.filename + '-routes.js'
     });
 
@@ -125,16 +132,16 @@ module.exports = {
     // Creates a folder at a static path
     // Example: './hey_look_a_folder': { folder: {} }
     
-    './assets/js/controllers/:filename': { 
+    './assets/js/controllers/:foldername': { 
         folder: {} 
     },
-    './assets/templates/:filename': { 
+    './assets/templates/:foldername': { 
         folder: {}  
     },
-    './assets/js/controllers/:filename/:ng_filename_controller': { 
+    './assets/js/controllers/:foldername/:ng_filename_controller': { 
         template: 'controller.template.js' 
     },
-    './assets/templates/:filename/:ng_filename_index': { 
+    './assets/templates/:foldername/:ng_filename_index': { 
         template: 'index.template.html' 
     },
     /*'./assets/routes/:filename/:ng_filename_routes': { 

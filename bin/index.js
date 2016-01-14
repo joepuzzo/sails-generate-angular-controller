@@ -20,7 +20,7 @@ var scope = {
 
     // For the NEW generator we're generating:
     generatorName: process.argv[2],
-    args: [process.argv[2]]
+    args: [process.argv[2], process.argv[3]]
 };
 sailsgen(scope, function (err) {
     if (err) throw err;
