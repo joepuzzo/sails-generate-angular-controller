@@ -19,6 +19,9 @@ process.argv.forEach(function (val, index, array) {
             case "--service":
                 params.service = true;
                 break;
+            case "--add-service":
+                params.add_service = true;
+                break;
             case "--shared": 
                 params.shared = true; 
                 break;
@@ -176,20 +179,21 @@ function define_targets( params ){
 
         // Creates a folder at a static path
         // Example: './hey_look_a_folder': { folder: {} }
-        
-        './assets/app/:target_dir/:foldername/:ng_filename_controller': { 
-            template: 'controller.template.js' 
-        },
-        './assets/app/:target_dir/:foldername/:ng_filename_html': { 
-            template: 'index.template.html' 
-        } 
-        /*'./assets/routes/:filename/:ng_filename_routes': { 
-            template: 'routes.template.js' 
-        }*/
     };
+
+
+    // Dont add controller or html page if we are just adding a service
+    if( !params.add_service ) { 
+        targets['./assets/app/:target_dir/:foldername/:ng_filename_controller'] = { 
+            template: 'controller.template.js' 
+        };
+        targets['./assets/app/:target_dir/:foldername/:ng_filename_html'] = { 
+            template: 'index.template.html' 
+        };
+    }
  
     // Use optional arguments to create other files and folders
-    if( params.service ) { 
+    if( params.service || params.add_service ) { 
         targets['./assets/app/:target_dir/:foldername/:ng_filename_service'] = { 
             template: 'service.template.js' 
         }; 
