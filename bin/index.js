@@ -23,7 +23,10 @@ var scope = {
     args: [process.argv[2], process.argv[3], process.argv[4]]
 };
 sailsgen(scope, function (err) {
-    if (err) throw err;
+    if (err) { 
+        console.trace(err)
+        throw err;
+    }
 
     // It worked.
     console.log('Done.');
