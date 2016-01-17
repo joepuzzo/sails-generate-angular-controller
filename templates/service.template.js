@@ -1,10 +1,10 @@
 /**
- * A basic starter template for an angular controller
+ * A basic starter template for an angular service
  * @see https://github.com/johnpapa/angular-styleguide for additional details
  */
 
 (function() {     
-    // dataservice factory
+    // factory
     angular
         .module('<%= appName %>')
         .factory('<%= serviceName %>Service', <%= serviceName %>Service);
@@ -12,6 +12,7 @@
     <%= serviceName %>Service.$inject = ['$http', 'logger'];
 
     function <%= serviceName %>Service($http, logger) {
+
         return {
             getAvengers: getAvengers
         };

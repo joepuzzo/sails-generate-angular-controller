@@ -10,12 +10,16 @@ _.defaults = require('merge-defaults');
 _.str = require('underscore.string');
 
 
+/*-------------- Process the arguments before wes start anything ------------*/
+
 // Used for optional parameters
 var params = {};
 
-// Process the arguments before wes start anything
 process.argv.forEach(function (val, index, array) {
         switch( val ) {
+            case "--directive":
+                params.directive = true;
+                break;
             case "--service":
                 params.service = true;
                 break;
@@ -25,14 +29,16 @@ process.argv.forEach(function (val, index, array) {
             case "--shared": 
                 params.shared = true; 
                 break;
-            case "-v":
-            case "--verbose":
-                params.verbose = true;
+            case "-h":
+            case "--help":
+                USAGE();
                 break;
             default: 
         }
 });
 
+
+/*---------------------- Export sails generator objects ----------------------*/
 
 /**
  * sails-generate-angular-controller
@@ -59,93 +65,98 @@ module.exports = {
 
    before: function (scope, cb) {
 
-    // scope.args are the raw command line arguments.
-    //
-    // e.g. if someone runs:
-    // $ sails generate angular-controller user find create update
-    // then `scope.args` would be `['user', 'find', 'create', 'update']`
-    if (!scope.args[0]) {
-      return cb( new Error('Please provide a name for this angular-controller.') );
-    }
+        /*------------------------ Basic validations -------------------------*/
 
-    if(!scope.args[1]) { 
-      return cb( new Error('Please provide a destinaation folder for this angular-controller.') );
-    }
+        // scope.args are the raw command line arguments.
+        //
+        // e.g. if someone runs:
+        // $ sails generate angular-controller user find create update
+        // then `scope.args` would be `['user', 'find', 'create', 'update']`
+        if (!scope.args[0]) {
+          //return cb( new Error('Please provide a name for this angular-controller.') );
+          USAGE();
+        }
 
-    // Default value for target directory 
-    scope.target_dir = params.shared ? "shared" : "components";
- 
-    // scope.rootPath is the base path for this generator
-    //
-    // e.g. if this generator specified the target:
-    // './Foobar.md': { copy: 'Foobar.md' }
-    //
-    // And someone ran this generator from `/Users/dbowie/sailsStuff`,
-    // then `/Users/dbowie/sailsStuff/Foobar.md` would be created.
-    if (!scope.rootPath) {
-      return cb( INVALID_SCOPE_VARIABLE('rootPath') );
-    }
+        if(!scope.args[1]) { 
+          //return cb( new Error('Please provide a destinaation folder for this angular-controller.') );
+          USAGE(); 
+        }
+     
+        // scope.rootPath is the base path for this generator
+        //
+        // e.g. if this generator specified the target:
+        // './Foobar.md': { copy: 'Foobar.md' }
+        //
+        // And someone ran this generator from `/Users/dbowie/sailsStuff`,
+        // then `/Users/dbowie/sailsStuff/Foobar.md` would be created.
+        if (!scope.rootPath) {
+          return cb( INVALID_SCOPE_VARIABLE('rootPath') );
+        }
 
-    ///////////////////////////////////////////////////////////////////
-    /*
-     * The following code was taken from the controller-angular generator 
-     * github link: https://github.com/chiefy/sails-generate-controller-angular
-     */ 
+        ///////////////////////////////////////////////////////////////////
+        /*
+         * The following code was taken from the controller-angular generator 
+         * github link: https://github.com/chiefy/sails-generate-controller-angular
+         */ 
 
-    // Check that we're in a valid sails project
-    // TODO: see if we can remove this-- I think it's already been done by
-    // Sails core at this point
-    var pathToPackageJSON = path.resolve(scope.rootPath, 'package.json');
-    var package, invalidPackageJSON;
-    try {
-        package = require(pathToPackageJSON);
-    } catch (e) {
-        invalidPackageJSON = true;
-    }
+        // Check that we're in a valid sails project
+        var pathToPackageJSON = path.resolve(scope.rootPath, 'package.json');
+        var package, invalidPackageJSON;
+        try {
+            package = require(pathToPackageJSON);
+        } catch (e) {
+            invalidPackageJSON = true;
+        }
 
-    _.defaults(scope, {
-        appName: package.name
-    });
+        _.defaults(scope, {
+            appName: package.name
+        });
 
-    if (invalidPackageJSON) {
-        return cb.invalid('Sorry, this command can only be used in the root directory of a Sails project.');
-    }
-    //////////////////////////////////////////////////////////////////
+        if (invalidPackageJSON) {
+            return cb.invalid('Sorry, this command can only be used in the root directory of a Sails project.');
+        }
+        //////////////////////////////////////////////////////////////////
 
-    // Decide the output filename for use in targets below:
-    scope.filename = scope.args[0];
 
-    // The output folder name
-    scope.foldername = scope.args[1];
+        /*-------------------- Define any scope variabeles ---------------------*/
+        // Add stuff to the scope for use in our templates:
 
-    // Attach defaults
-    _.defaults(scope, {
-      createdAt: new Date(), 
-      ctrl_as: scope.filename, //TODO lowercase this!
-      controllerName: _.str.capitalize(scope.filename),
-      serviceName: _.str.capitalize(scope.filename),
-      ng_filename_controller: scope.filename + '-controller.js', 
-      ng_filename_html: scope.filename + '-view.html',
-      ng_filename_routes: scope.filename + '-routes.js',
-      ng_filename_service: scope.filename + '-service.js' 
-    });
+        // Default value for target directory 
+        scope.target_dir = params.shared ? "shared" : "components";
 
-    // Add other stuff to the scope for use in our templates:
-    //scope.whatIsThis = 'an example file created at '+scope.createdAt;
+        // Decide the output filename for use in targets below:
+        scope.filename = scope.args[0];
 
-    // When finished, we trigger a callback with no error
-    // to begin generating files/folders as specified by
-    // the `targets` below.
-    cb();
+        // The output folder name
+        scope.foldername = scope.args[1];
+
+        // Attach defaults
+        _.defaults(scope, {
+          createdAt: new Date(), 
+          ctrl_as: scope.filename, //TODO lowercase this!
+          controllerName: _.str.capitalize(scope.filename),
+          serviceName: _.str.capitalize(scope.filename),
+          directiveName: scope.filename,
+          ng_filename_controller: scope.filename + '-controller.js', 
+          ng_filename_html: scope.filename + '-view.html',
+          ng_filename_routes: scope.filename + '-routes.js',
+          ng_filename_service: scope.filename + '-service.js',
+          ng_filename_directive: scope.filename + '-directive.js' 
+        });
+
+        // When finished, we trigger a callback with no error
+        // to begin generating files/folders as specified by
+        // the `targets` below.
+        cb();
   },
-
 
 
   /**
    * The files/folders to generate.
    * @type {Object}
+   * Note: Normally there would be an object defined inline here but I 
+   * moved it to a function to allow optional files.
    */
-
   targets: define_targets( params ), 
 
   /**
@@ -183,7 +194,7 @@ function define_targets( params ){
 
 
     // Dont add controller or html page if we are just adding a service
-    if( !params.add_service ) { 
+    if( !params.add_service && !params.directive ) { 
         targets['./assets/app/:target_dir/:foldername/:ng_filename_controller'] = { 
             template: 'controller.template.js' 
         };
@@ -192,12 +203,20 @@ function define_targets( params ){
         };
     }
  
-    // Use optional arguments to create other files and folders
+    // Use optional arguments to create other files and folders for directive
     if( params.service || params.add_service ) { 
         targets['./assets/app/:target_dir/:foldername/:ng_filename_service'] = { 
             template: 'service.template.js' 
         }; 
     }
+
+    // Use optional arguments to create other files and folders for service
+    if( params.directive ) { 
+        targets['./assets/app/:target_dir/:foldername/:ng_filename_directive'] = { 
+            template: 'directive.template.js' 
+        }; 
+    }
+
 
     return targets; 
 }
@@ -229,4 +248,16 @@ function INVALID_SCOPE_VARIABLE (varname, details, message) {
   message = util.inspect(message, varname);
 
   return new Error(message);
+}
+
+function USAGE( ) { 
+    console.log("Usage: sails generate angular-controller <name> <folder> [options]");
+    console.log("\nOptions: ");
+    console.log("  -h, --help \t print usage information");
+    console.log("  --shared \t use this to put files into the shared directory");
+    console.log("  --service \t create a service in additon to a controller and view");
+    console.log("  --add-service  use this to add a service if you have already created a controller");
+    console.log("  --directive \t create a directive");
+    console.log("\nDescription: Run this generator from within root directory of your sails application");
+    process.exit();
 }

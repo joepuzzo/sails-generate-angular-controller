@@ -15,7 +15,7 @@
     // Recomended way of injecting dependencies
      <%= controllerName %>Controller.$inject = [/*'dependencies', '$go', 'here'*/];
 
-    // The controller itsself 
+    /* @ngInject */ 
     function  <%= controllerName %>Controller() {
 
         // Using capture variables is good habbit to get in to
