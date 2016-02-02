@@ -22,32 +22,23 @@
         // it gives access to the 'this' object within callbacks 
         var vm = this;
         
-        // Memeber variables and methods here
-        vm.doSomething = doSomething;
-        vm.add = add;
-        vm.remove = remove;
+        // Memeber variables and methods
         vm.adding = false;
         vm.stuff = [];
         vm.title = 'Welcome to your new <%= filename %> page!';
-
+        vm.add = add;
+        vm.remove = remove;
+        
         ////////////
 
         // Function definitions should go below here
 
-        function doSomething() {
-          /* code here! */
-        }
-
         function add() {
-          /* Simulate time passed for example!*/
-          vm.adding = true;
-          setTimeout(function(){ 
-            vm.adding = false;
-          }, 3000);
+
         }
 
         function remove() {
-          /* */
+
         }
     }
 

@@ -8,13 +8,13 @@
     /* @ngInject */
     function <%= directiveName %>() {
         var directive = {
-            restrict: 'EA',
+            restrict: 'E',
             templateUrl: 'templateUrl',
             scope: {
             },
             link: linkFunc,
             controller: Controller,
-            controllerAs: 'vm',
+            controllerAs: 'something',
             bindToController: true
         };
 
@@ -31,9 +31,9 @@
     function Controller(dependencies) {
         var vm = this;
 
-        activate();
+        vm.doSomthing = doSomething;
 
-        function activate() {
+        function doSomething() { 
 
         }
     }

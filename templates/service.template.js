@@ -3,8 +3,10 @@
  * @see https://github.com/johnpapa/angular-styleguide for additional details
  */
 
-(function() {     
-    // factory
+(function() {    
+
+    'use strict';  
+
     angular
         .module('<%= appName %>')
         .factory('<%= serviceName %>Service', <%= serviceName %>Service);
@@ -14,21 +16,18 @@
     function <%= serviceName %>Service($http, logger) {
 
         return {
-            getAvengers: getAvengers
+            getData: getData;
         };
 
-        function getAvengers() {
-            return $http.get('/api/maa')
-                .then(getAvengersComplete)
-                .catch(getAvengersFailed);
-
-            function getAvengersComplete(response) {
-                return response.data.results;
-            }
-
-            function getAvengersFailed(error) {
-                logger.error('XHR Failed for getAvengers.' + error.data);
-            }
+        function getData() {
+            
+            return $http.get('/api/something')
+                .then( function( res ) { 
+                  return res.data;
+                })
+                .catch( function( err ) { 
+                  logger.error('Error:' + error.data);
+                });
         }
     }
 })(); 
